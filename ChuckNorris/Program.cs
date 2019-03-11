@@ -11,73 +11,23 @@
         {
             string MESSAGE = Console.ReadLine();
 
-            // var answer = Encode(MESSAGE);
+            var answer = Encode(MESSAGE);
 
-            string encode = MESSAGE.Select(x => (int)x)
-            .Select(x => Convert.ToString(x, 2).PadLeft(7, '0'))
-            .Aggregate((x, y) => x + y);
+            Console.WriteLine(answer);
+        }
+
+        public static string Encode(string input)
+        {
+            string encode = input.Select(x => (int)x)
+                .Select(x => Convert.ToString(x, 2).PadLeft(7, '0'))
+                .Aggregate((x, y) => x + y);
 
             encode = Regex.Replace(encode, @"(0+)", "00 $1 ");
             encode = Regex.Replace(encode, @"(1+)", "0 $1 ")
-                        .Replace("1", "0");
+                        .Replace("1", "0")
+                        .TrimEnd();
 
-            Console.WriteLine(encode.TrimEnd());
-        }
-
-        public static string GetBytes(char symbol)
-        {
-            return Convert.ToString((int)symbol, 2).PadLeft(7, '0');
-        }
-
-        public static string GetBytes(string symbols)
-        {
-            var sb = new StringBuilder();
-            foreach (char s in symbols)
-            {
-                sb.Append(GetBytes(s));
-            }
-
-            return sb.ToString();
-        }
-
-        public static string Encode(string message1)
-        {
-            var sb = new StringBuilder();
-
-            var message = GetBytes(message1);
-
-            char currentS = message[0];
-            if (currentS == '0')
-            {
-                sb.Append("00 ");
-            }
-            else
-            {
-                sb.Append("0 ");
-            }
-
-            foreach (char s in message)
-            {
-                if (s == currentS)
-                {
-                    sb.Append("0");
-                }
-                else
-                {
-                    if (s == '0')
-                    {
-                        sb.Append(" 00 0");
-                    }
-                    else
-                    {
-                        sb.Append(" 0 0");
-                    }
-
-                    currentS = s;
-                }
-            }
-
-            return sb.ToString();
+            return encode;
         }
 
         public static string Decode(string unary)
